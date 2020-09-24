@@ -1,4 +1,4 @@
-## MensageriaRabbitMQ-
+## MensageriaRabbitMQ
 1 - Instalar o RabbitMQ
 
 1.1 - Instalar o Erlang for Windows (OTP 23.0 Windows) -> https://www.erlang.org/downloads
