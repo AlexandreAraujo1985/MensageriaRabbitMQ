@@ -1,7 +1,5 @@
-﻿using System.Text;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using static System.Console;
+﻿using Consumer.Application;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Consumer
 {
@@ -9,30 +7,15 @@ namespace Consumer
     {
         static void Main(string[] args)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: "hello",
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
+            //Start container Ioc
+            var serviceCollection = new ServiceCollection()
+                .AddLogging()
+                .AddSingleton<IConsumerQueue, ConsumerQueue>()
+                .BuildServiceProvider();
 
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    WriteLine($"[x] Received {message}");
-                };
-                channel.BasicConsume(queue: "hello",
-                                     autoAck: true,
-                                     consumer: consumer);
-
-                WriteLine(" Press [enter] to exit.");
-                ReadLine();
-            }
+            //Start to services
+            var consumer = serviceCollection.GetService<IConsumerQueue>();
+            consumer.BasicConsume();
         }
     }
 }
