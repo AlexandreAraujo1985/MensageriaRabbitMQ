@@ -14,3 +14,7 @@
     1.3.3 - Acessar a URL http://localhost:15672/
 
     1.3.4 - Login guest, Senha: guest
+
+
+1.4 Iniciar o projeto Producer
+1.5 Iniciar o projeto Consumer
